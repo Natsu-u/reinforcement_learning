@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 class Bandit:
     def __init__(self,arms=10):
         self.arms = arms
@@ -34,6 +34,7 @@ all_rates0 = np.zeros((runs,steps)) #(2000,1000)の形状
 all_rates1 = np.zeros((runs,steps))
 all_rates2 = np.zeros((runs,steps))
 all_rates_list = [all_rates0, all_rates1, all_rates2]
+s = time.time()
 for i,epsilon in enumerate(epsilons):
     # if epsilon == 0.01 or epsilon == 0.3:
     #     print("pass")
@@ -55,26 +56,14 @@ for i,epsilon in enumerate(epsilons):
             print(f"\r{i} {run} {step}",end="")
 
         all_rates_list[i][run] = rates
+print()
+g = time.time()
+print(f"{g-s}秒")
 avg_rates0 = np.average(all_rates_list[0], axis=0)
 avg_rates1 = np.average(all_rates_list[1], axis=0)
 avg_rates2 = np.average(all_rates_list[2], axis=0)
 
 import matplotlib.pyplot as plt
-# plt.ylabel("Total reward")
-# plt.xlabel("Steps")
-# plt.plot(total_rewards)
-# plt.show()
-
-# plt.ylabel("Rates")
-# plt.xlabel("Steps")
-# plt.plot(rates)
-# plt.show()
-
-# plt.ylabel("Rates")
-# plt.xlabel("Steps")
-# for i in range(10):
-#     plt.plot(all_rates[i])
-# plt.show()
 
 plt.ylabel("Rates")
 plt.xlabel("Steps")
