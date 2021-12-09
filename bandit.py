@@ -30,8 +30,14 @@ runs = 2000
 steps = 1000
 # epsilon = 0.1
 epsilons = [0.01, 0.1, 0.3]
-all_rates = np.zeros((3,runs,steps)) #(3,2000,1000)の形状
-for epsilon in range(3):
+all_rates0 = np.zeros((runs,steps)) #(2000,1000)の形状
+all_rates1 = np.zeros((runs,steps))
+all_rates2 = np.zeros((runs,steps))
+all_rates_list = [all_rates0, all_rates1, all_rates2]
+for i,epsilon in enumerate(epsilons):
+    # if epsilon == 0.01 or epsilon == 0.3:
+    #     print("pass")
+    #     continue
     for run in range(runs):
         bandit = Bandit()
         agent = Agent(epsilon)
@@ -46,9 +52,12 @@ for epsilon in range(3):
 
             # total_rewards.append(sum_r)
             rates.append(sum_r / (step+1))
+            print(f"\r{i} {run} {step}",end="")
 
-        all_rates[epsilon][run] = rates
-    avg_rates = np.average(all_rates, axis=0)
+        all_rates_list[i][run] = rates
+avg_rates0 = np.average(all_rates_list[0], axis=0)
+avg_rates1 = np.average(all_rates_list[1], axis=0)
+avg_rates2 = np.average(all_rates_list[2], axis=0)
 
 import matplotlib.pyplot as plt
 # plt.ylabel("Total reward")
@@ -69,5 +78,8 @@ import matplotlib.pyplot as plt
 
 plt.ylabel("Rates")
 plt.xlabel("Steps")
-plt.plot(avg_rates)
+plt.plot(avg_rates0,label=0.01)
+plt.plot(avg_rates1,label=0.1)
+plt.plot(avg_rates2,label=0.3)
+plt.legend()
 plt.show()
